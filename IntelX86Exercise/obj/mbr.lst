@@ -2,21 +2,28 @@
      2                                  
      3                                  org 0x7c00
      4                                  
-     5 00000000 B800B8                  mov ax, 0xb800
-     6 00000003 8EC0                    mov es, ax
-     7                                  
-     8 00000005 26C606000048            mov byte[es:0000], 'H'
-     9 0000000B 26C606010007            mov byte[es:0x01],0x07
-    10 00000011 26C606020065            mov byte[es:0002], 'e'
-    11 00000017 26C606030007            mov byte[es:0x03],0x07
+     5 00000000 E90E00                  jmp near start
+     6                                  
+     7 00000003 480765076C076C076F-     msg db 'H',0x07,'e', 0x07,'l', 0x07,'l', 0x07,'o', 0x07,'!', 0x07,' ', 0x07
+     7 0000000C 0721072007         
+     8                                  
+     9                                  start:
+    10 00000011 89C8                    	mov ax, cx
+    11 00000013 8ED8                    	mov ds, ax
     12                                  
-    13                                  fin:
-    14 0000001D E9FDFF                  	jmp near fin
+    13 00000015 B800B8                  	mov ax, 0xb800
+    14 00000018 8EC0                    	mov es, ax
     15                                  
-    16                                  number:
-    17 00000020 0000000000              	db 0,0,0,0,0
-    18                                  
-    19 00000025 00<rept>                times 510-($-$$) db 0
-    20 000001FE 55AA                    db 0x55,0xaa
+    16 0000001A FC                      	cld
+    17 0000001B BE[0300]                	mov si, msg
+    18 0000001E BF0000                  	mov di, 0
+    19 00000021 B90700                  	mov cx, (start-msg)/2
+    20 00000024 F3A5                    	rep movsw
     21                                  
-    22 00000200 00<rept>                times 1474048 db 0
+    22                                  fin:
+    23 00000026 E9FDFF                  	jmp near fin
+    24                                  
+    25 00000029 00<rept>                times 510-($-$$) db 0
+    26 000001FE 55AA                    db 0x55,0xaa
+    27                                  
+    28 00000200 00<rept>                times 1474048 db 0

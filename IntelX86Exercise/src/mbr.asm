@@ -2,22 +2,25 @@
 
 org 0x7c00
 
-mov ax, 0xb800
-mov es, ax
+jmp near start
 
-mov byte[es:0000], 'H'
-mov byte[es:0x01],0x07
-mov byte[es:0002], 'e'
-mov byte[es:0x03],0x07
+msg db 'H',0x07,'e', 0x07,'l', 0x07,'l', 0x07,'o', 0x07,'!', 0x07,' ', 0x07
 
-mov cx, cs
-mov ds, cx
+start:
+	mov ax, cx
+	mov ds, ax
+
+	mov ax, 0xb800
+	mov es, ax
+
+	cld
+	mov si, msg
+	mov di, 0
+	mov cx, (start-msg)/2
+	rep movsw
 
 fin:
 	jmp near fin
-
-number:
-	db 0,0,0,0,0
 
 times 510-($-$$) db 0
 db 0x55,0xaa
